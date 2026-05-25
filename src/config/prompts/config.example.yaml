@@ -1,0 +1,69 @@
+# ============================================
+# ARCHIVO DE EJEMPLO - Copia esto a config.yaml
+# ============================================
+#
+# INSTRUCCIONES:
+# 1. Copia este archivo como config.yaml
+# 2. Reemplaza el contenido con tus prompts reales
+# 3. NO commitear config.yaml (está en .gitignore)
+# 4. config.example.yaml sí se versionea en Git
+
+version: "1.0.0"
+description: "Configuración de agente virtual con múltiples prompts"
+
+# LLM Configuration
+# Cambia el modelo, temperatura, tokens según necesites
+llm:
+  provider: "gemini"  # "gemini", "claude", "openai"
+  model: "gemini-2.5-flash"
+  temperature: 0.7
+  maxOutputTokens: 1024
+
+# Prompts
+# Cada prompt tiene su propia KEY y contenido
+prompts:
+  AGENT_CHAT_PROMPT:
+    name: "Agente Virtual - Chat Principal"
+    description: "Prompt para conversaciones generales"
+    enabled: true
+    content: |
+      Escribe aquí el contenido del prompt...
+      Puedes usar saltos de línea naturales.
+
+      [SECCIONES]
+      - Puedes organizar como prefieras
+      - Cada sección con sus detalles
+      - Formatting como prefieras
+
+  AGENT_INTERVIEW_PROMPT:
+    name: "Entrevista Técnica"
+    description: "Prompt para entrevistas estructuradas"
+    enabled: false
+    content: |
+      Escribe el prompt para entrevistas...
+
+      [ENFOQUE]
+      - Preguntas técnicas
+      - Evaluación de habilidades
+      - Tono profesional
+
+  AGENT_COACHING_PROMPT:
+    name: "Sesión de Coaching"
+    description: "Prompt para mentoría y coaching"
+    enabled: false
+    content: |
+      Escribe el prompt para coaching...
+
+      [TÉCNICAS]
+      - Escucha activa
+      - Preguntas poderosas
+      - Empatía
+
+  # AGREGAR MAS PROMPTS AQUI
+  # Simplemente agrega un nuevo bloque como:
+  # AGENT_CUSTOM_PROMPT:
+  #   name: "Mi Prompt Personalizado"
+  #   description: "Descripción..."
+  #   enabled: true
+  #   content: |
+  #     Contenido del prompt...

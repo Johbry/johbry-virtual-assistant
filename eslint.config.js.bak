@@ -1,0 +1,2 @@
+// ESLint configuration is in .eslintrc.json
+module.exports = {};
