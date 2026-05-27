@@ -3,10 +3,22 @@
  * Estructura centralizada para mostrar en el panel izquierdo
  */
 
+import { calculateExperience } from './dateUtils';
+
 export interface SkillItem {
   title: string;
   description?: string;
   link?: string;
+}
+
+export interface ExperienceItem {
+  title: string;
+  company: string;
+  period: string;
+  startDate: string; // ISO format: YYYY-MM-DD
+  endDate?: string;  // ISO format: YYYY-MM-DD, undefined = presente
+  duration?: string; // Calculado automáticamente
+  description: string[];
 }
 
 export interface CVData {
@@ -24,12 +36,7 @@ export interface CVData {
     category: string;
     items: (string | SkillItem)[];
   }[];
-  experience: {
-    title: string;
-    company: string;
-    period: string;
-    description: string[];
-  }[];
+  experience: ExperienceItem[];
   education: {
     institution: string;
     degree: string;
@@ -39,10 +46,20 @@ export interface CVData {
 }
 
 /**
+ * Calcula la duración de todas las experiencias
+ */
+function enrichExperienceData(experiences: ExperienceItem[]): ExperienceItem[] {
+  return experiences.map(exp => ({
+    ...exp,
+    duration: calculateExperience(exp.startDate, exp.endDate).formatted,
+  }));
+}
+
+/**
  * Datos del CV de Johbry Mellado
  * Extraídos del AGENT_CHAT_PROMPT en config.yaml
  */
-export const johbryCV: CVData = {
+const johbryCVRaw: CVData = {
   personal: {
     name: 'Johbry Mellado',
     email: 'johbrym@gmail.com',
@@ -125,6 +142,7 @@ export const johbryCV: CVData = {
       title: 'QA Automation Engineer',
       company: 'BIT S.A.',
       period: 'Septiembre 2023 - Presente',
+      startDate: '2023-09-01',
       description: [
         'Automatización de casos de prueba E2E, regresión y smoke',
         'Reporte de bugs en Jira con seguimiento constante',
@@ -135,6 +153,8 @@ export const johbryCV: CVData = {
       title: 'Quality Assurance Tester',
       company: 'SKILLCORP TECHNOLOGY C.A.',
       period: 'Diciembre 2019 - Noviembre 2021',
+      startDate: '2019-12-01',
+      endDate: '2021-11-30',
       description: [
         'Pruebas manuales en aplicaciones Web y Mobile',
         'Verificación de APIs con Postman',
@@ -145,6 +165,8 @@ export const johbryCV: CVData = {
       title: 'Auxiliar Administrativo',
       company: 'Plumrose Latinoamericana C.A.',
       period: 'Febrero 2017 - Agosto 2018',
+      startDate: '2017-02-01',
+      endDate: '2018-08-31',
       description: [
         'Gestión de inventarios',
         'Análisis contable',
@@ -177,4 +199,12 @@ export const johbryCV: CVData = {
     'Selenium', 'Playwright', 'Stress Testing', 'Cypress', 'JMeter', 'Git', 'VS Code',
     'SQL', 'MongoDB', 'MySQL', 'OOP', 'Page Models', 'Claude API', 'Claude Code', 'LLM',
   ],
+};
+
+/**
+ * CV enriquecido con duraciones calculadas automáticamente
+ */
+export const johbryCV: CVData = {
+  ...johbryCVRaw,
+  experience: enrichExperienceData(johbryCVRaw.experience),
 };
